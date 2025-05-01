@@ -1,0 +1,56 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using {{PROJECT_NAME}}.Models.DTOs;
+using {{PROJECT_NAME}}.Data;
+using {{PROJECT_NAME}}.Extensions;
+using {{PROJECT_NAME}}.Helpers;
+using {{PROJECT_NAME}}.Models.Entities;
+
+namespace {{PROJECT_NAME}}.Services;
+
+public interface I{{ENTITY_NAME_PLUR}}Service
+{
+	Task<Response<PagedList<{{ENTITY_NAME}}DTO>>> GetAll({{ENTITY_NAME}}Filter filter);
+	Task<Response<{{ENTITY_NAME}}DTO>> GetById(Guid id);
+	Task<Response<{{ENTITY_NAME}}DTO>> Create({{ENTITY_NAME}}FormDTO form);
+	Task Update({{ENTITY_NAME}}UpdateDTO update);
+	Task Delete(Guid id);
+}
+
+public class {{ENTITY_NAME_PLUR}}Service : BaseService, I{{ENTITY_NAME_PLUR}}Service
+{
+	public {{ENTITY_NAME_PLUR}}Service(MasterDbContext context, IMapper mapper): base(context, mapper)
+	{}
+
+	public async Task<Response<PagedList<{{ENTITY_NAME}}DTO>>> GetAll({{ENTITY_NAME}}Filter filter)
+	{
+		var {{ENTITY_NAME_CC_PLUR}} = await _context.{{ENTITY_NAME_PLUR}}
+			.WhereBaseFilter(filter)
+			.OrderByCreationDate()
+			.ProjectTo<{{ENTITY_NAME}}DTO>(_mapper.ConfigurationProvider)
+			.Paginate(filter);
+
+		return new Response<PagedList<{{ENTITY_NAME}}DTO>>({{ENTITY_NAME_CC_PLUR}}, null, 200);
+	}
+
+	public async Task<Response<{{ENTITY_NAME}}DTO>> GetById(Guid id)
+	{
+        var dto = await _context.GetByIdOrException<{{ENTITY_NAME}}, {{ENTITY_NAME}}DTO>(id);
+		return new Response<{{ENTITY_NAME}}DTO>(dto, null, 200);
+	}
+
+	public async Task<Response<{{ENTITY_NAME}}DTO>> Create({{ENTITY_NAME}}FormDTO form)
+	{
+	    var dto = await _context.CreateWithMapper<{{ENTITY_NAME}},{{ENTITY_NAME}}DTO>(form, _mapper);
+
+		return new Response<{{ENTITY_NAME}}DTO>(dto, null, 200);
+	}
+
+	public async Task Update({{ENTITY_NAME}}UpdateDTO update)
+	{
+	    await _context.UpdateWithMapperOrException<{{ENTITY_NAME}},{{ENTITY_NAME}}UpdateDTO>(update, _mapper);
+	}
+
+	public async Task Delete(Guid id) =>
+	    await _context.SoftDeleteOrException<{{ENTITY_NAME}}>(id);
+}

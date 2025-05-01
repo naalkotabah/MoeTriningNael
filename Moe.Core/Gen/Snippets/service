@@ -1,0 +1,1 @@
+        services.AddScoped<I{{ENTITY_NAME_PLUR}}Service, {{ENTITY_NAME_PLUR}}Service>();

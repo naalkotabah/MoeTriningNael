@@ -1,0 +1,5 @@
+        
+        CreateMap<{{ENTITY_NAME}},{{ENTITY_NAME}}DTO>();
+        CreateMap<{{ENTITY_NAME}}FormDTO,{{ENTITY_NAME}}>();
+        CreateMap<{{ENTITY_NAME}}UpdateDTO,{{ENTITY_NAME}}>()
+            .IgnoreNullAndEmptyGuids();

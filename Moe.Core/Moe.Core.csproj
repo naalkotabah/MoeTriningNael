@@ -1,0 +1,143 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin/$(Configuration)/$(TargetFramework)/$(MSBuildProjectName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FirebaseAdmin" Version="2.4.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
+    <PackageReference Include="Hangfire" Version="1.8.11" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.11" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.20.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageReference Include="QuestPDF" Version="2024.7.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.6.2" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configs\" />
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\Tmp\0d7e79ae-a939-4a22-9480-f32166c846fb\a24f6345-d6d5-4467-99e6-c4393f146bef.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Tmp\044c760e-2b94-4468-8c3e-df055733619e\a01cd049-edd4-4ae5-9812-41765ad6eb60.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Tmp\164d0fb1-632e-4ba9-a7ef-e08673c1a17c\51a8159f-7cd0-45d2-bdc1-24b84945afa9.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Tmp\26768eac-30e7-4f7f-990f-24215aee91d6\7f99107e-6c82-42a6-befe-fdb1bdd7b699.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Tmp\a12ce4d2-910a-48c6-9054-fa16b05e8df4\5f27fba7-92e5-4d4a-9a24-ddc0487e2462.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Tmp\c7a54f38-5e21-42db-b754-efef5c0e88c4\f1f02184-436a-42ab-9c1f-4742c45dfe2d.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Tmp\e0cdcb98-1a20-484e-a0a2-b9410deb8e0b\91639fc9-ba95-41b1-ab84-b6a316cf2a88.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\.gitinclude" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\094ba418-578a-462a-874e-595dd5ffdb3b.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\103340c6-b59a-416e-b9ca-c73246235d1b.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\18b0d4d7-7d18-449b-8b3d-09f7a322813b.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\3425a14a-72ce-49ee-9bd6-997ce8a51680.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\446cfb7f-de72-4528-b758-9a96a58d1aa8.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\5394722f-e773-4328-a061-78404e5ce5f7.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\82131efd-f9af-4114-95ef-99974ccfff5f.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\8ad0516e-6625-47ae-87e7-6d143568a069.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\8c068eb7-4654-42c6-b56d-9b78e5a8f681.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\8ff40bb8-d703-47f8-b3f1-e93331c8290d.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\990a5167-1d19-47e5-b9d1-ceeafae67f14.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\b34ea47a-0f6e-452d-a6d9-98a68ad59ff3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\b666e3df-ea56-425a-9c2b-494a8ad82353.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\b848d2c2-abca-49a3-a800-736df276bd6e.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\c44439c4-ddd0-4b01-a2ca-b71b7ad0ef47.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\e827fbf0-0774-4485-abbb-097736808813.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\CertsImages\f6a97e5a-fc2d-4713-b4ec-16710e8cc385.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\TemplatesImages\.gitinclude" />
+    <_ContentIncludedByDefault Remove="wwwroot\TemplatesImages\3170d0d2-010f-488e-87aa-5c20d4004f4dt.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\TemplatesImages\4e10de0c-422d-48cb-b4bf-fb9b03c8b44et.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\TemplatesImages\66b434cf-2011-494a-b882-b37a9ebd8a94t.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\TemplatesImages\96b2dc3c-ecd9-4458-abdc-c65870cca13dt.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\TemplatesImages\c95c7a05-a7d6-4e4c-a2ce-03bc480bf275t.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\Tmp\.gitinclude" />
+    <_ContentIncludedByDefault Remove="Firebase\google_creds.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\html\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\swagger\swagger-dark.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Controllers\BaseController.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BaseController.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Controllers\BaseController.ar.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BaseController.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\Translation.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\Translation.ar.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translation.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\Translation.ku.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translation.ku.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Controllers\BaseController.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BaseController.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Controllers\BaseController.ar.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BaseController.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Translations\Translation.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Translation.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Translations\Translation.ar.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Translation.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Translations\Translation.ku.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Translation.ku.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

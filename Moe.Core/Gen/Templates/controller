@@ -1,0 +1,94 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using {{PROJECT_NAME}}.Models.DTOs;
+using {{PROJECT_NAME}}.ActionFilters;
+using {{PROJECT_NAME}}.Helpers;
+using {{PROJECT_NAME}}.Models.DTOs;
+using {{PROJECT_NAME}}.Services;
+
+namespace {{PROJECT_NAME}}.Controllers;
+
+/// <summary>
+/// Basic cruds
+/// </summary>
+public class {{ENTITY_NAME_PLUR}}Controller : BaseController
+{
+	private readonly I{{ENTITY_NAME_PLUR}}Service _{{ENTITY_NAME_CC_PLUR}}Service;
+
+	public {{ENTITY_NAME_PLUR}}Controller(I{{ENTITY_NAME_PLUR}}Service {{ENTITY_NAME_CC_PLUR}}Service)
+	{
+		_{{ENTITY_NAME_CC_PLUR}}Service = {{ENTITY_NAME_CC_PLUR}}Service;
+	}
+	
+	#region CRUDs
+    /// <summary>
+    /// Retrieves a paged list
+    /// </summary>
+    /// <remarks>
+    /// Required Roles: `Any`
+    /// </remarks>
+	[Authorize]
+	[TypeFilter(typeof(SoftDeleteAccessFilterActionFilter))]
+	[HttpGet]
+	public async Task<ActionResult<Response<PagedList<{{ENTITY_NAME}}DTO>>>> GetAll([FromQuery] {{ENTITY_NAME}}Filter filter) =>
+		Ok(await _{{ENTITY_NAME_CC_PLUR}}Service.GetAll(filter));
+
+    /// <summary>
+    /// Retrieves a single instance by its ID
+    /// </summary>
+    /// <remarks>
+    /// Required Roles: `Any`
+    /// </remarks>
+	[Authorize]
+	[HttpGet("{id}")]
+	public async Task<ActionResult<Response<{{ENTITY_NAME}}DTO>>> GetById(Guid id) =>
+		Ok(await _{{ENTITY_NAME_CC_PLUR}}Service.GetById(id));
+
+    /// <summary>
+    /// Creates a new instance
+    /// </summary>
+    /// <remarks>
+    /// Required Roles: `Any`
+    /// </remarks>
+	[Authorize]
+	[HttpPost]
+	public async Task<ActionResult<Response<{{ENTITY_NAME}}DTO>>> Create([Required] [FromBody] {{ENTITY_NAME}}FormDTO form) =>
+		Ok(await _{{ENTITY_NAME_CC_PLUR}}Service.Create(form));
+
+    /// <summary>
+    /// Updates an instance determined by its ID
+    /// </summary>
+    /// <remarks>
+    /// Required Roles: `Any`
+    /// </remarks>
+	[Authorize]
+	[HttpPut("{id}")]
+	[ProducesResponseType(204)]
+	[ProducesResponseType(404)]
+	public async Task<IActionResult> Update([Required] [FromBody] {{ENTITY_NAME}}UpdateDTO update, Guid id)
+	{
+		update.Id = id;
+		await _{{ENTITY_NAME_CC_PLUR}}Service.Update(update);
+		
+		return Ok();
+	}
+
+    /// <summary>
+    /// Deletes an instance determined by its ID
+    /// </summary>
+    /// <remarks>
+    /// Required Roles: `Any`
+    /// </remarks>
+	[Authorize]
+	[HttpDelete("{id}")]
+	[ProducesResponseType(204)]
+	[ProducesResponseType(404)]
+	public async Task<IActionResult> Delete(Guid id)
+	{
+	    await _{{ENTITY_NAME_CC_PLUR}}Service.Delete(id);
+	    return Ok();
+	}
+	#endregion
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Connection Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const connectBtn = document.getElementById("connectBtn");
+
+            connectBtn.addEventListener("click", function() {
+                const token = document.getElementById("tokenInput").value;
+
+                if (!token) {
+                    alert("Please enter a JWT token.");
+                    return;
+                }
+
+                const connection = new signalR.HubConnectionBuilder()
+                    .withUrl("http://localhost:6969/hubs/master", {
+                        accessTokenFactory: () => token
+                    })
+                    .configureLogging(signalR.LogLevel.Information)
+                    .build();
+
+                // Start the connection
+                connection.start()
+                    .then(() => {
+                        console.log("Connected to SignalR hub");
+                        alert("Connection established successfully.");
+                    })
+                    .catch(err => {
+                        console.error("Error connecting to SignalR hub:", err);
+                        alert("Connection failed: " + err.toString());
+                    });
+
+                // Listen for notifications
+                connection.on("ReceiveNotification", (notification) => {
+                    console.log("Received notification:", notification);
+                    alert(`Notification Received:\nTitle: ${notification.Title}\nContent: ${notification.Content}`);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<label for="tokenInput">JWT Token:</label><br>
+<input type="text" id="tokenInput" placeholder="Enter JWT token here" /><br><br>
+<button id="connectBtn">Connect</button>
+</body>
+</html>

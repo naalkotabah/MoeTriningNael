@@ -1,0 +1,22 @@
+namespace {{PROJECT_NAME}}.Models.DTOs;
+
+public class {{ENTITY_NAME}}DTO : BaseDTO
+{
+    #region Auto
+    #endregion
+    
+    #region Manual
+    #endregion
+} 
+
+public class {{ENTITY_NAME}}FormDTO : BaseFormDTO
+{
+}
+
+public class {{ENTITY_NAME}}UpdateDTO : BaseUpdateDTO
+{
+}
+
+public class {{ENTITY_NAME}}Filter : BaseFilter
+{
+}

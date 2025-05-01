@@ -1,0 +1,1 @@
+    public DbSet<{{ENTITY_NAME}}> {{ENTITY_NAME_PLUR}} { get; set; }

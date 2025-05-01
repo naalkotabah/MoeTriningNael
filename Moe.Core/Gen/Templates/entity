@@ -1,0 +1,16 @@
+namespace {{PROJECT_NAME}}.Models.Entities;
+
+public class {{ENTITY_NAME}} : BaseEntity
+{
+    #region One-To-N
+    #endregion
+    
+    #region Functional
+    #endregion
+    
+    #region Non-Functional
+    #endregion
+    
+    #region Many-To-N
+    #endregion
+}
