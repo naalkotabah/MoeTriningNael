@@ -14,6 +14,11 @@ public class RegisterFormDTO
 
     public string? Name { get; set; }
 
+
+    [Required]
+    [MaxLength(20)]
+    public string? Username { get; set; } 
+
     [Required] public OtpDestination OtpDestination { get; set; }
     
     [StringLength(30, MinimumLength = 6)]

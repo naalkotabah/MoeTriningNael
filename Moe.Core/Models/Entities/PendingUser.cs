@@ -14,6 +14,11 @@ public class PendingUser : BaseEntity
     [MaxLength(128)] public string? Email { get; set; }
 
     [MaxLength(16)] public string? Phone { get; set; }
+    [MaxLength(128)] public string Name { get; set; }
+
+    [Required]
+    [MaxLength(20)]
+    public string Username { get; set; } 
     [MaxLength(8)] public string? PhoneCountryCode { get; set; }
 
     [JsonIgnore] public Byte[] PasswordHash { get; set; }

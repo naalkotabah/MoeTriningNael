@@ -1,8 +1,10 @@
 using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Moe.Core.Data;
+using Moe.Core.Models.Entities;
 using Moe.Core.Null;
 
 namespace Moe.Core.Extensions;
@@ -54,6 +56,22 @@ public static class AppBuilderExtensions
 
                 if (user == null)
                     ErrResponseThrower.Unauthorized();
+
+                if (user.IsBanned == UserState.Band)
+                {
+                    ctx.Response.StatusCode = 403;
+                    ctx.Response.ContentType = "application/json";
+                    await ctx.Response.WriteAsync(JsonSerializer.Serialize(new
+                    {
+                        statusCode = 403,
+                        message = "Your account is banned.",
+                        data = (string?)null
+                    }));
+                    return;
+                }
+
+
+
             }
             else
             {

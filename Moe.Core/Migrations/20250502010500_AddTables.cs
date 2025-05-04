@@ -3,14 +3,33 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Moe.Core.Data.Migrations
+namespace Moe.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class AddTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ChangePasswordRequest",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Otp = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: true),
+                    NewPasswordHash = table.Column<string>(type: "text", nullable: false),
+                    NewPasswordSalt = table.Column<string>(type: "text", nullable: false),
+                    State = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChangePasswordRequest", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "LocalizedContents",
                 columns: table => new
@@ -79,7 +98,7 @@ namespace Moe.Core.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SystemSettingses", x => x.Id);
+                    table.PrimaryKey("PK_SystemSettings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,6 +110,7 @@ namespace Moe.Core.Data.Migrations
                     Email = table.Column<string>(type: "character varying(320)", maxLength: 320, nullable: true),
                     Phone = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
                     PhoneCountryCode = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
+                    IsBanned = table.Column<int>(type: "integer", nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "bytea", nullable: true),
                     PasswordSalt = table.Column<byte[]>(type: "bytea", nullable: true),
                     Lang = table.Column<int>(type: "integer", nullable: false),
@@ -281,6 +301,9 @@ namespace Moe.Core.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ChangePasswordRequest");
+
             migrationBuilder.DropTable(
                 name: "Cities");
 

@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Moe.Core.Data.Migrations
+namespace Moe.Core.Migrations
 {
     [DbContext(typeof(MasterDbContext))]
-    [Migration("20250501002851_AddColmBannedForUser")]
-    partial class AddColmBannedForUser
+    [Migration("20250502235512_AddEmailandPhonChang")]
+    partial class AddEmailandPhonChang
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,83 @@ namespace Moe.Core.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Moe.Core.Models.Entities.ChangeEmailRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("NewEmail")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Otp")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChangeEmailRequest");
+                });
+
+            modelBuilder.Entity("Moe.Core.Models.Entities.ChangePasswordRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("NewPasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NewPasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Otp")
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChangePasswordRequest");
+                });
 
             modelBuilder.Entity("Moe.Core.Models.Entities.City", b =>
                 {
@@ -39,9 +116,6 @@ namespace Moe.Core.Data.Migrations
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -72,9 +146,6 @@ namespace Moe.Core.Data.Migrations
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -110,9 +181,6 @@ namespace Moe.Core.Data.Migrations
                     b.Property<string>("En")
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -125,6 +193,45 @@ namespace Moe.Core.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LocalizedContents");
+                });
+
+            modelBuilder.Entity("Moe.Core.Models.Entities.Moe.Core.Models.Entities.ChangePhoneRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("NewPhone")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Otp")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChangePhoneRequest");
                 });
 
             modelBuilder.Entity("Moe.Core.Models.Entities.Notification", b =>
@@ -151,9 +258,6 @@ namespace Moe.Core.Data.Migrations
 
                     b.Property<int?>("HelperIdType")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -204,9 +308,6 @@ namespace Moe.Core.Data.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
-
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -265,9 +366,6 @@ namespace Moe.Core.Data.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -299,9 +397,6 @@ namespace Moe.Core.Data.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -328,9 +423,6 @@ namespace Moe.Core.Data.Migrations
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -363,8 +455,8 @@ namespace Moe.Core.Data.Migrations
                         .HasMaxLength(320)
                         .HasColumnType("character varying(320)");
 
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
+                    b.Property<int>("IsBanned")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");

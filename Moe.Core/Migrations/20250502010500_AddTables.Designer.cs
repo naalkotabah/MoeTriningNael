@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Moe.Core.Data.Migrations
+namespace Moe.Core.Migrations
 {
     [DbContext(typeof(MasterDbContext))]
-    [Migration("20241111114319_Init")]
-    partial class Init
+    [Migration("20250502010500_AddTables")]
+    partial class AddTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,44 @@ namespace Moe.Core.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Moe.Core.Models.Entities.ChangePasswordRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("NewPasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NewPasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Otp")
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChangePasswordRequest");
+                });
 
             modelBuilder.Entity("Moe.Core.Models.Entities.City", b =>
                 {
@@ -316,7 +354,7 @@ namespace Moe.Core.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemSettingses");
+                    b.ToTable("SystemSettings");
                 });
 
             modelBuilder.Entity("Moe.Core.Models.Entities.User", b =>
@@ -338,6 +376,9 @@ namespace Moe.Core.Data.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(320)
                         .HasColumnType("character varying(320)");
+
+                    b.Property<int>("IsBanned")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");

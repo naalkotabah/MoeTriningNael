@@ -116,14 +116,16 @@ using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<MasterDbContext>();
     var seeder = new Seeder(dataContext);
-    
-    await seeder.SeedSuperAdmin("test@test.com");
+
+    await seeder.SeedDefaultUsers(); 
+
     if (app.Environment.IsDevelopment())
     {
         bool ignoreExistingRecords = false;
-        //await seeder.SeedCountriesCities(ignoreExistingRecords);
+       
     }
 }
+
 #endif
 
 // Run

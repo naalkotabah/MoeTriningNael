@@ -3,28 +3,34 @@ using FluentValidation;
 
 namespace Moe.Core.Models.DTOs.Auth;
 
-public class LoginFormDTO
+public class LoginFormDTO 
 {
-    [EmailAddress] [MaxLength(128)] public string? Email { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneCountryCode { get; set; }
+    public string? Phone { get; set; }
+    public string? Username { get; set; }
 
-    [MaxLength(10)] public string? PhoneCountryCode { get; set; }
-    [Phone] [MaxLength(20)] public string? Phone { get; set; }
+    [Required]
+    [StringLength(30, MinimumLength = 6)]
+    public string Password { get; set; }
 
-    [Required] [MinLength(6)] public string Password { get; set; }
+
 }
+
 
 public class LoginFormFluentValidator : AbstractValidator<LoginFormDTO>
 {
     public LoginFormFluentValidator()
     {
-        RuleFor(x => x.Email)
-            .NotNull().NotEmpty()
-            .When(x => x.Phone == null);
-        RuleFor(x => x.Phone)
-            .NotNull().NotEmpty()
-            .When(x => x.Email == null);
+        RuleFor(x => x)
+            .Must(x =>
+                !string.IsNullOrWhiteSpace(x.Email) ||
+                (!string.IsNullOrWhiteSpace(x.Phone) && !string.IsNullOrWhiteSpace(x.PhoneCountryCode)) ||
+                !string.IsNullOrWhiteSpace(x.Username))
+            .WithMessage("You must provide either Email, Phone with CountryCode, or Username.");
+
         RuleFor(x => x.PhoneCountryCode)
-            .NotNull().NotEmpty()
-            .When(x => x.Email == null);
+            .NotEmpty()
+            .When(x => !string.IsNullOrWhiteSpace(x.Phone));
     }
 }

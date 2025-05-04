@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Moe.Core.Models.Entities;
 using Moe.Core.Data.Interceptors;
+using Moe.Core.Models.Entities.Moe.Core.Models.Entities;
 
 namespace Moe.Core.Data;
 
@@ -28,7 +29,14 @@ public class MasterDbContext : DbContext
     //{{INSERTION_POINT}}  
     public DbSet<SystemSettings> SystemSettings { get; set; }
 
-    
+    public DbSet<ChangePasswordRequest> ChangePasswordRequest { get; set; }
+
+    public DbSet<ChangeEmailRequest> ChangeEmailRequest { get; set; }
+
+
+    public DbSet<ChangePhoneRequest> ChangePhoneRequest { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Notification>(entity =>

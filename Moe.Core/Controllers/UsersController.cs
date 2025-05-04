@@ -19,33 +19,25 @@ public class UsersController : BaseController
     {
         _usersService = usersService;
     }
-
     #region CRUDs
-    [Authorize(Roles = "super-admin")]
+    [Authorize]
     [TypeFilter(typeof(SoftDeleteAccessFilterActionFilter))]
     [HttpGet]
-    public async Task<ActionResult<Response<PagedList<UserDTO>>>> GetAll([FromQuery] UserFilterDTO filter)
+    public async Task<ActionResult<Response<PagedList<UserDTO>>>> GetAllUsers([FromQuery] UserFilterDTO filter)
     {
-        
-        return Ok(await _usersService.GetAll(filter));  
+        var curRole = CurRole; 
+        var result = await _usersService.GetAll(filter, curRole);
+        return StatusCode(result.StatusCode, result);
     }
-
-
-
     [Authorize(Roles = "super-admin")]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<UserDTO>>> GetById(Guid id) =>
         Ok(await _usersService.GetById(id));
 
-
-
     [Authorize(Roles = "super-admin")]
     [HttpPost]
     public async Task<ActionResult<Response<UserDTO>>> Create([FromBody] UserFormDTO form) =>
         Ok(await _usersService.Create(form));
-
-
-
 
     [Authorize(Roles = "super-admin")]
     [HttpPut("{id}")]
@@ -54,8 +46,23 @@ public class UsersController : BaseController
         await _usersService.Update(id, update);
         return Ok();
     }
-
-
+    /// <summary>
+    ///0 Band
+    ///1 Unband
+    /// </summary>
+    [ProducesResponseType(200)]
+    [Authorize(Roles = "super-admin")]
+    [HttpPost("users/ban-toggle")]
+    public async Task<ActionResult<Response<string>>> SetUserState([FromBody] SetUserStateDTO dto)
+    {
+         dto.StaticRole = CurRole;
+        if (CurRole == "NORMAL")
+        {
+            return  new Response<string>(null, "Access denied", 403);
+        }
+        var result = await _usersService.SetUserState(dto);
+        return new Response<string>(null, "Done", result.StatusCode);
+    }
 
 
     [Authorize(Roles = "super-admin")]
@@ -67,30 +74,14 @@ public class UsersController : BaseController
         return Ok("For you");
     }
     #endregion
-
-    [Authorize(Roles = "super-admin")]
-    [HttpPost("ban/{id}")]
-    public async Task<IActionResult> BanUser(Guid id)
-    {
-        await _usersService.BanUser(id);
-        return Ok("User has been banned.");
-    }
-
-
-
     [HttpGet("current")]
     public async Task<ActionResult<Response<UserDTO>>> GetCurrent() =>
         Ok(await _usersService.GetById(CurId));
 
-
-
-
     [HttpPut("current")]
     public async Task<ActionResult<Response<UserDTO>>> UpdateCurrent(Guid id ,[FromBody] UserUpdateDTO update)
     {
-     
         update.Id = CurId;
-        
         await _usersService.Update(CurId, update);
         return Ok(update);
     }

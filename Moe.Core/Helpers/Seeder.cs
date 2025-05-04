@@ -20,28 +20,39 @@ public class Seeder
         _masterDbContext = masterDbContext;
     }
 
-    public async Task SeedSuperAdmin(string email)
+    public async Task SeedDefaultUsers()
     {
-        if (!await _masterDbContext.Users.AnyAsync(e => e.Email == email))
+        var users = new List<(string Role, string Email, string Phone, string PhoneCode, string Name)>
+    {
+        ("SUPER_ADMIN", "superadmin@example.com", "700000001", "+964", "Super Admin"),
+        ("ADMIN", "admin@example.com", "700000002", "+964", "System Admin"),
+        ("NORMAL", "normal@example.com", "700000003", "+964", "Test User")
+    };
+
+        foreach (var (role, email, phone, phoneCode, name) in users)
         {
-            var user = new User
+            if (!await _masterDbContext.Users.AnyAsync(u => u.Email == email))
             {
-                StaticRole = StaticRole.SUPER_ADMIN,
-                Email = email,
-                Phone = "123445678",
-                PhoneCountryCode = "+111",
+                var user = new User
+                {
+                    StaticRole = Enum.Parse<StaticRole>(role),
+                    Email = email,
+                    Phone = phone,
+                    PhoneCountryCode = phoneCode,
+                    Name = name
+                };
 
-                Name = "Nael Qutabia",
-            };
+                using var hmac = new HMACSHA512();
+                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("string"));
+                user.PasswordSalt = hmac.Key;
 
-            using var hmac = new HMACSHA512();
-            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("string"));
-            user.PasswordSalt = hmac.Key;
-
-            await _masterDbContext.Users.AddAsync(user);
-            await _masterDbContext.SaveChangesAsync();
+                await _masterDbContext.Users.AddAsync(user);
+            }
         }
+
+        await _masterDbContext.SaveChangesAsync();
     }
+
 
     public async Task SeedCountriesCities(bool ignoreExistingRecords=false)
     {

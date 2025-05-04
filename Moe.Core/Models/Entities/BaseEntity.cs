@@ -12,7 +12,7 @@ public class BaseEntity
     public DateTime? DeletedAt { get; set; }
 
     public bool IsDeleted { get; set; } = false;
-    public bool IsBanned { get; set; } = false;
+ 
 
     public virtual async Task Delete(MasterDbContext _context)
     {

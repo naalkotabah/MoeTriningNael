@@ -9,6 +9,7 @@ using Moe.Core.Services;
 using Moe.Core.Data;
 using Moe.Core.Models.DTOs.User;
 using Moe.Core.Models.Entities;
+using Moe.Core.Models.Entities.Moe.Core.Models.Entities;
 
 namespace Moe.Core.Controllers;
 
@@ -42,9 +43,23 @@ public class AuthController : BaseController
     /// Handles user login
     /// </summary>
     /// <remarks>
-    /// Default accounts (All have "string" as password):
-    /// - sa@example.com (Super Admin)
+    ///  Default test accounts (all use password: <b>string</b>):
+    /// 
+    /// -  Super Admin:
+    ///   Email: <c>superadmin@example.com</c>
+    ///   Phone: <c>+964700000001</c>
+    ///
+    /// -  Admin:
+    ///   Email: <c>admin@example.com</c>
+    ///   Phone: <c>+964700000002</c>
+    ///
+    /// -  Normal User:
+    ///   Email: <c>normal@example.com</c>
+    ///   Phone: <c>+964700000003</c>
+    ///
+    /// You can login using either email or phone + country code.
     /// </remarks>
+
     [HttpPost("login")]
     public async Task<ActionResult<Response<string>>> Login([FromBody] LoginFormDTO form)
     {
@@ -71,39 +86,68 @@ public class AuthController : BaseController
 
 
 
-    [Authorize]
-    [HttpPost("ForgetPassword")]
-    public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordFormDTO form)
+    [AllowAnonymous]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> RequestChangePassword([FromBody] ChangePasswordRequestFormDTO form)
     {
-        var response = await _authService.ForgetPassword(form);
-        if (response.StatusCode == 200)
-        {
-            return Ok(response); 
-        }
-        else
-        {
-            return BadRequest(response); 
-        }
+        var result = await _authService.CreateChangePasswordRequest(form);
+        return StatusCode(result.StatusCode, result);
     }
 
-    [Authorize]
-    [HttpPost("VerifyOtp")]
-    public async Task<IActionResult> VerifyOtp([FromBody] ForgetPasswordVerifyOtpFormDTO form)
+    [AllowAnonymous]
+    [HttpPost("change-password/verify")]
+    public async Task<IActionResult> VerifyChangePassword([FromBody] ChangePasswordRequestVerificationFormDTO form)
     {
-        
-        var response = await _authService.VerifyForgetPasswordOtp(CurId, form);
 
-        if (response.StatusCode == 200)
-        {
-            return Ok(response); 
-        }
-        else
-        {
-            return BadRequest(response);
-        }
+        var result = await _authService.VerifyChangePasswordRequest(form);
+        return StatusCode(result.StatusCode, result);
     }
 
 
+    [Authorize]
+    [HttpPost("change-email")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> RequestChangeEmail([FromBody] ChangeEmailRequestFormDTO form)
+    {
+        form.UserId = CurId; 
+        var result = await _authService.CreateChangeEmailRequest(form);
+        return StatusCode(result.StatusCode, result);
+    }
+
+    [Authorize]
+    [HttpPost("change-email/verify")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> VerifyChangeEmail([FromBody] ChangeEmailRequestVerificationFormDTO form)
+    {
+        form.CurId = CurId; 
+        var result = await _authService.VerifyChangeEmailRequest(form);
+        return StatusCode(result.StatusCode, result);
+    }
+
+
+    [Authorize]
+    [HttpPost("change-Phone")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> RequestPhoneEmail([FromBody] ChangePhoneFormDTO form)
+    {
+        form.UserId = CurId;
+        var result = await _authService.CreateChangePhoneRequest(form);
+        return StatusCode(result.StatusCode, result);
+    }
+
+    [Authorize]
+    [HttpPost("change-Phone/verify")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> VerifyChangePhone([FromBody] ChangePhoneRequestVerificationFormDTO form)
+    {
+        form.CurId = CurId;
+        var result = await _authService.VerifyChangePhoneRequest(form);
+        return StatusCode(result.StatusCode, result);
+    }
     #endregion
 
     #region OAuth

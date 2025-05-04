@@ -1,3 +1,4 @@
+using Moe.Core.Models.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -12,7 +13,11 @@ public class User : BaseEntity
     
     [MaxLength(16)] public string? Phone { get; set; }
     [MaxLength(8)] public string? PhoneCountryCode { get; set; }
-    
+
+    [MaxLength(20)] public string? Username { get; set; }
+
+    public UserState IsBanned { get; set; } = UserState.Active;
+
     [JsonIgnore] public byte[] PasswordHash { get; set; }
     [JsonIgnore] public byte[] PasswordSalt { get; set; }
     #endregion
@@ -40,4 +45,23 @@ public enum StaticRole
     SUPER_ADMIN = 0,
     ADMIN = 10,
     NORMAL = 20
+}
+
+public enum UserState
+{
+    Active = 0,
+    Band = 1,
+    
+    
+}
+public class SetUserStateDTO
+{
+
+    [JsonIgnore]
+    public string StaticRole { get; set; }
+    [Required]
+    public Guid UserId { get; set; }
+
+    [Required]
+    public UserState NewState { get; set; }
 }
