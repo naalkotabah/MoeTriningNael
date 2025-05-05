@@ -21,7 +21,7 @@ public interface IAuthService
     Task<Response<string>> VerifyRegister(VerifyOtpFormDTO form);
 
     
-    Task<Response<string>> ResetPassword(Guid userId, ResetPasswordFormDTO form);
+    Task<Response<string>> ResetPassword(ResetPasswordFormDTO form);
 
     Task<Response<Guid>> CreateChangePasswordRequest(ChangePasswordRequestFormDTO form);
 
@@ -196,9 +196,9 @@ public class AuthService : BaseService, IAuthService
     }
 
 
-    public async Task<Response<string>> ResetPassword(Guid userId, ResetPasswordFormDTO form)
+    public async Task<Response<string>> ResetPassword(ResetPasswordFormDTO form)
     {
-        var user = await _context.Users.FindAsync(userId);
+        var user = await _context.Users.FindAsync(form.UserId);
 
         var hmacOld = new HMACSHA512(user.PasswordSalt);
         var dtoOldPassHash = hmacOld.ComputeHash(Encoding.UTF8.GetBytes(form.OldPassword));

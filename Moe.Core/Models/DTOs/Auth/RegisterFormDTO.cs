@@ -25,10 +25,26 @@ public class RegisterFormDTO
     public string Password { get; set; }
 }
 
+
 public class RegisterFormValidator : AbstractValidator<RegisterFormDTO>
 {
-    
+    public RegisterFormValidator()
+    {
+        RuleFor(e => e.Email)
+            .NotEmpty()
+            .NotNull()
+            .When(e => e.Phone == null);
+
+        RuleFor(e => e.PhoneCountryCode)
+            .NotEmpty()
+            .NotNull()
+            .When(e => !string.IsNullOrEmpty(e.Phone));
+
+
+       
+    }
 }
+
 
 public enum OtpDestination
 {

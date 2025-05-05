@@ -80,27 +80,28 @@ public class AuthController : BaseController
     [ProducesResponseType(401)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordFormDTO form)
     {
-        await _authService.ResetPassword(CurId, form);
+        form.UserId = CurId;
+        await _authService.ResetPassword(form);
         return Ok(new Response<object>(null, null, 200));
     }
 
 
 
-    [AllowAnonymous]
+   
     [HttpPost("change-password")]
     public async Task<IActionResult> RequestChangePassword([FromBody] ChangePasswordRequestFormDTO form)
     {
         var result = await _authService.CreateChangePasswordRequest(form);
-        return StatusCode(result.StatusCode, result);
+        return Ok(result);
     }
 
-    [AllowAnonymous]
+
     [HttpPost("change-password/verify")]
     public async Task<IActionResult> VerifyChangePassword([FromBody] ChangePasswordRequestVerificationFormDTO form)
     {
 
         var result = await _authService.VerifyChangePasswordRequest(form);
-        return StatusCode(result.StatusCode, result);
+        return Ok(result);
     }
 
 
@@ -112,7 +113,7 @@ public class AuthController : BaseController
     {
         form.UserId = CurId; 
         var result = await _authService.CreateChangeEmailRequest(form);
-        return StatusCode(result.StatusCode, result);
+        return Ok(result);
     }
 
     [Authorize]
@@ -123,7 +124,7 @@ public class AuthController : BaseController
     {
         form.CurId = CurId; 
         var result = await _authService.VerifyChangeEmailRequest(form);
-        return StatusCode(result.StatusCode, result);
+        return Ok(result);
     }
 
 
@@ -135,7 +136,7 @@ public class AuthController : BaseController
     {
         form.UserId = CurId;
         var result = await _authService.CreateChangePhoneRequest(form);
-        return StatusCode(result.StatusCode, result);
+        return Ok(result);
     }
 
     [Authorize]
@@ -146,7 +147,7 @@ public class AuthController : BaseController
     {
         form.CurId = CurId;
         var result = await _authService.VerifyChangePhoneRequest(form);
-        return StatusCode(result.StatusCode, result);
+        return Ok(result);
     }
     #endregion
 

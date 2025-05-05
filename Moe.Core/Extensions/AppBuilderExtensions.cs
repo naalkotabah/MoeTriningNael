@@ -59,15 +59,8 @@ public static class AppBuilderExtensions
 
                 if (user.IsBanned == UserState.Band)
                 {
-                    ctx.Response.StatusCode = 403;
-                    ctx.Response.ContentType = "application/json";
-                    await ctx.Response.WriteAsync(JsonSerializer.Serialize(new
-                    {
-                        statusCode = 403,
-                        message = "Your account is banned.",
-                        data = (string?)null
-                    }));
-                    return;
+                    ErrResponseThrower.Unauthorized("You are not Active.");
+
                 }
 
 
@@ -75,7 +68,7 @@ public static class AppBuilderExtensions
             }
             else
             {
-                // If not authenticated and endpoint requires authorization, return unauthorized
+                
                 ErrResponseThrower.Unauthorized();
             }
 

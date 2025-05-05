@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Moe.Core.Models.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -59,7 +60,8 @@ public class SetUserStateDTO
 
     [JsonIgnore]
     public string StaticRole { get; set; }
-    [Required]
+
+
     public Guid UserId { get; set; }
 
     [Required]

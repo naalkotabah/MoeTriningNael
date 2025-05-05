@@ -7,6 +7,7 @@ using Moe.Core.Models.DTOs.User;
 using Moe.Core.Services;
 using Moe.Core.Models.DTOs;
 using Moe.Core.Models.Entities;
+using FirebaseAdmin.Auth;
 
 namespace Moe.Core.Controllers;
 
@@ -25,11 +26,16 @@ public class UsersController : BaseController
     [HttpGet]
     public async Task<ActionResult<Response<PagedList<UserDTO>>>> GetAllUsers([FromQuery] UserFilterDTO filter)
     {
-        var curRole = CurRole; 
-        var result = await _usersService.GetAll(filter, curRole);
-        return StatusCode(result.StatusCode, result);
+
+        if (Enum.TryParse<StaticRole>(CurRole, out var parsedRole))
+        {
+            filter.Role = parsedRole;
+        }
+        var result = await _usersService.GetAll(filter);
+        return Ok(result);
     }
-    [Authorize(Roles = "super-admin")]
+
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<UserDTO>>> GetById(Guid id) =>
         Ok(await _usersService.GetById(id));
@@ -47,21 +53,21 @@ public class UsersController : BaseController
         return Ok();
     }
     /// <summary>
-    ///0 Band
-    ///1 Unband
+    ///0 Activ
+    ///1 band
     /// </summary>
     [ProducesResponseType(200)]
     [Authorize(Roles = "super-admin")]
-    [HttpPost("users/ban-toggle")]
-    public async Task<ActionResult<Response<string>>> SetUserState([FromBody] SetUserStateDTO dto)
+    [HttpPut("{id}/ban-toggle")]
+    public async Task<ActionResult<Response<string>>> SetUserState(Guid id)
     {
-         dto.StaticRole = CurRole;
+     
         if (CurRole == "NORMAL")
         {
             return  new Response<string>(null, "Access denied", 403);
         }
-        var result = await _usersService.SetUserState(dto);
-        return new Response<string>(null, "Done", result.StatusCode);
+        var result = await _usersService.SetUserState(id);
+        return Ok(result);
     }
 
 
@@ -74,10 +80,12 @@ public class UsersController : BaseController
         return Ok("For you");
     }
     #endregion
+    [Authorize]
     [HttpGet("current")]
+  
     public async Task<ActionResult<Response<UserDTO>>> GetCurrent() =>
         Ok(await _usersService.GetById(CurId));
-
+    [Authorize]
     [HttpPut("current")]
     public async Task<ActionResult<Response<UserDTO>>> UpdateCurrent(Guid id ,[FromBody] UserUpdateDTO update)
     {
