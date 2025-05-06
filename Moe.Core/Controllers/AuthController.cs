@@ -67,7 +67,6 @@ public class AuthController : BaseController
         form.PhoneCountryCode = _phoneNumberNormalizer.NormalizeCountryCode(form.PhoneCountryCode);
         return Ok(await _authService.Login(form));
     }
-
     /// <summary>
     /// Reset your password
     /// </summary>
@@ -84,18 +83,12 @@ public class AuthController : BaseController
         await _authService.ResetPassword(form);
         return Ok(new Response<object>(null, null, 200));
     }
-
-
-
-   
     [HttpPost("change-password")]
     public async Task<IActionResult> RequestChangePassword([FromBody] ChangePasswordRequestFormDTO form)
     {
         var result = await _authService.CreateChangePasswordRequest(form);
         return Ok(result);
     }
-
-
     [HttpPost("change-password/verify")]
     public async Task<IActionResult> VerifyChangePassword([FromBody] ChangePasswordRequestVerificationFormDTO form)
     {
@@ -126,8 +119,6 @@ public class AuthController : BaseController
         var result = await _authService.VerifyChangeEmailRequest(form);
         return Ok(result);
     }
-
-
     [Authorize]
     [HttpPost("change-Phone")]
     [ProducesResponseType(200)]
@@ -138,7 +129,6 @@ public class AuthController : BaseController
         var result = await _authService.CreateChangePhoneRequest(form);
         return Ok(result);
     }
-
     [Authorize]
     [HttpPost("change-Phone/verify")]
     [ProducesResponseType(200)]
