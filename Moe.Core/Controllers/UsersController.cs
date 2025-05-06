@@ -27,9 +27,9 @@ public class UsersController : BaseController
     public async Task<ActionResult<Response<PagedList<UserDTO>>>> GetAllUsers([FromQuery] UserFilterDTO filter)
     {
 
-        if (Enum.TryParse<StaticRole>(CurRole, out var parsedRole))
+     if(CurRole == StaticRole.NORMAL.ToString())
         {
-            filter.Role = parsedRole;
+            filter.Role = StaticRole.NORMAL;
         }
         var result = await _usersService.GetAll(filter);
         return Ok(result);
