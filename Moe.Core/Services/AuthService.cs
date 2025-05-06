@@ -189,8 +189,7 @@ public class AuthService : BaseService, IAuthService
 
         var token = JwtToken.GenToken(user.Id, user.StaticRole.ToRoleString());
 
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
+      
 
         return new Response<string>(token, null, 200);
     }
