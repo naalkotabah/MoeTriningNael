@@ -36,7 +36,13 @@ public class MasterDbContext : DbContext
 
     public DbSet<ChangePhoneRequest> ChangePhoneRequest { get; set; }
 
+    public DbSet<Warehouse> warehouses { get; set; }
 
+    public DbSet<Item> items { get; set; }
+
+    public DbSet<WarehouseItem> WarehouseItems { get; set; }
+
+    public DbSet<InventoryMovement> InventoryMovements { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Notification>(entity =>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Moe.Core.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Moe.Core.Migrations
 {
     [DbContext(typeof(MasterDbContext))]
-    partial class MasterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518154549_AddWarehouse ")]
+    partial class AddWarehouse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,50 +163,6 @@ namespace Moe.Core.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Moe.Core.Models.Entities.InventoryMovement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("FromWarehouseId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("MovementDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("ToWarehouseId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromWarehouseId");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("ToWarehouseId");
-
-                    b.ToTable("InventoryMovements");
-                });
-
             modelBuilder.Entity("Moe.Core.Models.Entities.Item", b =>
                 {
                     b.Property<Guid>("Id")
@@ -223,9 +182,6 @@ namespace Moe.Core.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -711,33 +667,6 @@ namespace Moe.Core.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Name");
-                });
-
-            modelBuilder.Entity("Moe.Core.Models.Entities.InventoryMovement", b =>
-                {
-                    b.HasOne("Moe.Core.Models.Entities.Warehouse", "FromWarehouse")
-                        .WithMany()
-                        .HasForeignKey("FromWarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Moe.Core.Models.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Moe.Core.Models.Entities.Warehouse", "ToWarehouse")
-                        .WithMany()
-                        .HasForeignKey("ToWarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FromWarehouse");
-
-                    b.Navigation("Item");
-
-                    b.Navigation("ToWarehouse");
                 });
 
             modelBuilder.Entity("Moe.Core.Models.Entities.Notification", b =>
