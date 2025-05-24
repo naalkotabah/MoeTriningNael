@@ -189,8 +189,7 @@ public class AuthService : BaseService, IAuthService
 
         var token = JwtToken.GenToken(user.Id, user.StaticRole.ToRoleString());
 
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
+      
 
         return new Response<string>(token, null, 200);
     }
@@ -200,21 +199,28 @@ public class AuthService : BaseService, IAuthService
     {
         var user = await _context.Users.FindAsync(form.UserId);
 
+        if (user == null)
+            return new Response<string>(null, "User not found", 404); 
+
+     
         var hmacOld = new HMACSHA512(user.PasswordSalt);
         var dtoOldPassHash = hmacOld.ComputeHash(Encoding.UTF8.GetBytes(form.OldPassword));
 
         if (!user.PasswordHash.SequenceEqual(dtoOldPassHash))
-            return new Response<string>(null, "WRONG_PASSWORD", 401);
+            return new Response<string>(null, "WRONG_PASSWORD", 401); 
 
+       
         var hmacNew = new HMACSHA512();
         user.PasswordHash = hmacNew.ComputeHash(Encoding.UTF8.GetBytes(form.NewPassword));
         user.PasswordSalt = hmacNew.Key;
 
+        
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
 
         return new Response<string>("Password changed successfully", null, 200); 
     }
+
 
 
 

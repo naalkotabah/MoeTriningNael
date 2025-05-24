@@ -24,6 +24,21 @@ public class ResetPasswordFormDTO
 
 
 
+public class ResetPasswordFormDTOFluentValidator : AbstractValidator<ResetPasswordFormDTO>
+{
+    public ResetPasswordFormDTOFluentValidator()
+    {
+        RuleFor(x => x)
+            .Must(x =>
+                (!string.IsNullOrWhiteSpace(x.OldPassword) && !string.IsNullOrWhiteSpace(x.NewPassword))
+            )
+            .WithMessage("Both OldPassword and NewPassword are required.");
+    }
+}
+
+
+
+
 public class ForgetPasswordFormDTO
 {
     public string? Email { get; set; }

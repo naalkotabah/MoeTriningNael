@@ -18,7 +18,7 @@ public interface IUsersService
     Task<Response<UserDTO>> GetById(Guid id);
     Task<Response<UserDTO>> Create(UserFormDTO form);
     Task Update(Guid id, UserUpdateDTO update);
-    Task Delete(Guid id, bool isPermanent);
+    Task<Response<string>> Delete(Guid id, bool isPermanent);
 
     Task<Response<string>> SetUserState(Guid id);
 
@@ -122,49 +122,43 @@ public class UsersService : BaseService, IUsersService
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(Guid id, bool isPermanent)
+    public async Task<Response<string>> Delete(Guid id, bool isPermanent)
     {
         var user = await _context.Users.FindAsync(id);
 
         if (user == null)
         {
-            throw new ArgumentException("User not found.");
+            return new Response<string>(null, "User not found.", 400);
         }
 
         if (isPermanent)
-        {       
+        {
             _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return new Response<string>(null, "User permanently deleted.", 200);
         }
         else
         {
-           
             user.IsDeleted = true;
             _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return new Response<string>(null, "User soft-deleted (marked as deleted).", 200);
         }
-
-        await _context.SaveChangesAsync();
     }
-
     public async Task<Response<string>> SetUserState(Guid id)
     {
         var user = await _context.Users.FindAsync(id);
         if (user == null)
             return new Response<string>(null, "User not found", 404);
 
-        if (user.IsBanned == UserState.Active)
-        {
-            user.IsBanned = UserState.Band;  
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-            return new Response<string>("User state set to banned.", null, 200);
-        }
-        else
-        {
-            user.IsBanned = UserState.Active;  
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-            return new Response<string>("User state set to active.", null, 200);
-        }
+        user.IsBanned = user.IsBanned == UserState.Active ? UserState.Band : UserState.Active;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+
+        var message = user.IsBanned == UserState.Band ? "User state set to banned." : "User state set to active.";
+        return new Response<string>(message, null, 200);
     }
+
 
 }

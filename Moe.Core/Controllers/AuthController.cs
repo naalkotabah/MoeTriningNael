@@ -67,7 +67,6 @@ public class AuthController : BaseController
         form.PhoneCountryCode = _phoneNumberNormalizer.NormalizeCountryCode(form.PhoneCountryCode);
         return Ok(await _authService.Login(form));
     }
-
     /// <summary>
     /// Reset your password
     /// </summary>
@@ -78,26 +77,23 @@ public class AuthController : BaseController
     [HttpPost("reset-password")]
     [ProducesResponseType(200)]
     [ProducesResponseType(401)]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordFormDTO form)
+    public async Task<ActionResult<Response<string>>> ResetPassword([FromBody] ResetPasswordFormDTO form)
     {
-        form.UserId = CurId;
-        await _authService.ResetPassword(form);
-        return Ok(new Response<object>(null, null, 200));
+        form.UserId = CurId; 
+
+        var result = await _authService.ResetPassword(form);
+            return Ok(result); 
+       
     }
 
-
-
-   
     [HttpPost("change-password")]
-    public async Task<IActionResult> RequestChangePassword([FromBody] ChangePasswordRequestFormDTO form)
+    public async Task<ActionResult<Response<string>>> RequestChangePassword([FromBody] ChangePasswordRequestFormDTO form)
     {
         var result = await _authService.CreateChangePasswordRequest(form);
         return Ok(result);
     }
-
-
     [HttpPost("change-password/verify")]
-    public async Task<IActionResult> VerifyChangePassword([FromBody] ChangePasswordRequestVerificationFormDTO form)
+    public async Task<ActionResult<Response<string>>> VerifyChangePassword([FromBody] ChangePasswordRequestVerificationFormDTO form)
     {
 
         var result = await _authService.VerifyChangePasswordRequest(form);
@@ -109,7 +105,7 @@ public class AuthController : BaseController
     [HttpPost("change-email")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> RequestChangeEmail([FromBody] ChangeEmailRequestFormDTO form)
+    public async Task<ActionResult<Response<string>>> RequestChangeEmail([FromBody] ChangeEmailRequestFormDTO form)
     {
         form.UserId = CurId; 
         var result = await _authService.CreateChangeEmailRequest(form);
@@ -120,30 +116,27 @@ public class AuthController : BaseController
     [HttpPost("change-email/verify")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> VerifyChangeEmail([FromBody] ChangeEmailRequestVerificationFormDTO form)
+    public async Task<ActionResult<Response<string>>> VerifyChangeEmail([FromBody] ChangeEmailRequestVerificationFormDTO form)
     {
         form.CurId = CurId; 
         var result = await _authService.VerifyChangeEmailRequest(form);
         return Ok(result);
     }
-
-
     [Authorize]
     [HttpPost("change-Phone")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> RequestPhoneEmail([FromBody] ChangePhoneFormDTO form)
+    public async Task<ActionResult<Response<string>>> RequestPhoneEmail([FromBody] ChangePhoneFormDTO form)
     {
         form.UserId = CurId;
         var result = await _authService.CreateChangePhoneRequest(form);
         return Ok(result);
     }
-
     [Authorize]
     [HttpPost("change-Phone/verify")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> VerifyChangePhone([FromBody] ChangePhoneRequestVerificationFormDTO form)
+    public async Task<ActionResult<Response<string>>> VerifyChangePhone([FromBody] ChangePhoneRequestVerificationFormDTO form)
     {
         form.CurId = CurId;
         var result = await _authService.VerifyChangePhoneRequest(form);

@@ -27,9 +27,9 @@ public class UsersController : BaseController
     public async Task<ActionResult<Response<PagedList<UserDTO>>>> GetAllUsers([FromQuery] UserFilterDTO filter)
     {
 
-        if (Enum.TryParse<StaticRole>(CurRole, out var parsedRole))
+        if(CurRole == StaticRole.NORMAL.ToString())
         {
-            filter.Role = parsedRole;
+            filter.Role = StaticRole.NORMAL;
         }
         var result = await _usersService.GetAll(filter);
         return Ok(result);
@@ -52,37 +52,28 @@ public class UsersController : BaseController
         await _usersService.Update(id, update);
         return Ok();
     }
-    /// <summary>
-    ///0 Activ
-    ///1 band
-    /// </summary>
+    
     [ProducesResponseType(200)]
     [Authorize(Roles = "super-admin")]
     [HttpPut("{id}/ban-toggle")]
     public async Task<ActionResult<Response<string>>> SetUserState(Guid id)
     {
-     
         if (CurRole == "NORMAL")
         {
             return  new Response<string>(null, "Access denied", 403);
         }
-        var result = await _usersService.SetUserState(id);
-        return Ok(result);
+        return Ok(await _usersService.SetUserState(id));
     }
 
 
     [Authorize(Roles = "super-admin")]
     [HttpDelete("{id}")]
     [ProducesResponseType(200)]
-    public async Task<IActionResult> Delete(Guid id ,[FromQuery] bool isPermanent)
-    {
-        await _usersService.Delete(id, isPermanent);
-        return Ok("For you");
-    }
+    public async Task<IActionResult> Delete(Guid id, [FromQuery] bool isPermanent)=>
+         Ok(await _usersService.Delete(id, isPermanent));
     #endregion
     [Authorize]
     [HttpGet("current")]
-  
     public async Task<ActionResult<Response<UserDTO>>> GetCurrent() =>
         Ok(await _usersService.GetById(CurId));
     [Authorize]
