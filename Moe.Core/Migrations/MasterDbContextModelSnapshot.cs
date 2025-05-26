@@ -160,93 +160,6 @@ namespace Moe.Core.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Moe.Core.Models.Entities.InventoryMovement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("FromWarehouseId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("MovementDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("ToWarehouseId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromWarehouseId");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("ToWarehouseId");
-
-                    b.ToTable("InventoryMovements");
-                });
-
-            modelBuilder.Entity("Moe.Core.Models.Entities.Item", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Unit")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("items");
-                });
-
             modelBuilder.Entity("Moe.Core.Models.Entities.LocalizedContent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -602,89 +515,6 @@ namespace Moe.Core.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Moe.Core.Models.Entities.Warehouse", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Location")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("warehouses");
-                });
-
-            modelBuilder.Entity("Moe.Core.Models.Entities.WarehouseItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("WarehouseId");
-
-                    b.ToTable("WarehouseItems");
-                });
-
-            modelBuilder.Entity("UserWarehouse", b =>
-                {
-                    b.Property<Guid>("AdminsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("WarehousesManagedId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("AdminsId", "WarehousesManagedId");
-
-                    b.HasIndex("WarehousesManagedId");
-
-                    b.ToTable("UserWarehouse");
-                });
-
             modelBuilder.Entity("Moe.Core.Models.Entities.City", b =>
                 {
                     b.HasOne("Moe.Core.Models.Entities.Country", "Country")
@@ -713,33 +543,6 @@ namespace Moe.Core.Migrations
                     b.Navigation("Name");
                 });
 
-            modelBuilder.Entity("Moe.Core.Models.Entities.InventoryMovement", b =>
-                {
-                    b.HasOne("Moe.Core.Models.Entities.Warehouse", "FromWarehouse")
-                        .WithMany()
-                        .HasForeignKey("FromWarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Moe.Core.Models.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Moe.Core.Models.Entities.Warehouse", "ToWarehouse")
-                        .WithMany()
-                        .HasForeignKey("ToWarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FromWarehouse");
-
-                    b.Navigation("Item");
-
-                    b.Navigation("ToWarehouse");
-                });
-
             modelBuilder.Entity("Moe.Core.Models.Entities.Notification", b =>
                 {
                     b.HasOne("Moe.Core.Models.Entities.User", "Actor")
@@ -764,48 +567,9 @@ namespace Moe.Core.Migrations
                         .HasForeignKey("RoleId");
                 });
 
-            modelBuilder.Entity("Moe.Core.Models.Entities.WarehouseItem", b =>
-                {
-                    b.HasOne("Moe.Core.Models.Entities.Item", "Item")
-                        .WithMany("WarehouseItems")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Moe.Core.Models.Entities.Warehouse", "Warehouse")
-                        .WithMany("WarehouseItems")
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("UserWarehouse", b =>
-                {
-                    b.HasOne("Moe.Core.Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("AdminsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Moe.Core.Models.Entities.Warehouse", null)
-                        .WithMany()
-                        .HasForeignKey("WarehousesManagedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Moe.Core.Models.Entities.Country", b =>
                 {
                     b.Navigation("Cities");
-                });
-
-            modelBuilder.Entity("Moe.Core.Models.Entities.Item", b =>
-                {
-                    b.Navigation("WarehouseItems");
                 });
 
             modelBuilder.Entity("Moe.Core.Models.Entities.Role", b =>
@@ -818,11 +582,6 @@ namespace Moe.Core.Migrations
                     b.Navigation("NotificationsReceived");
 
                     b.Navigation("NotificationsSent");
-                });
-
-            modelBuilder.Entity("Moe.Core.Models.Entities.Warehouse", b =>
-                {
-                    b.Navigation("WarehouseItems");
                 });
 #pragma warning restore 612, 618
         }

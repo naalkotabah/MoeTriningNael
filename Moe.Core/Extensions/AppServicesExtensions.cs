@@ -15,7 +15,6 @@ using Moe.Core.Helpers;
 using Moe.Core.Services;
 using Moe.Core.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using static ItemService;
 
 namespace Moe.Core.Extensions;
 
@@ -83,19 +82,9 @@ public static class AppServicesExtensions
         services.AddScoped<ICountriesService, CountriesService>();
         services.AddScoped<ICitiesService, CitiesService>();
         services.AddScoped<IRolesService, RolesService>();
-
-        services.AddScoped<IFileService, FileService>();
-        services.AddScoped<IWarehouseService, WarehouseService>();
-        services.AddScoped<IItemService, ItemService>();
-
-
-        services.AddScoped<IWarehouseItemService, WarehouseItemService>();
-
-        services.AddScoped<IInventoryMovementService, InventoryMovementService>();
-
-
+        
         //{{INSERTION_POINT}}
-
+        
         return services;
     }
 

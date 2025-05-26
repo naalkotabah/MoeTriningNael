@@ -38,10 +38,6 @@ public class User : BaseEntity
     #region Many-To-N
     public ICollection<Notification> NotificationsSent { get; set; } = new List<Notification>();
     public ICollection<Notification> NotificationsReceived { get; set; } = new List<Notification>();
-
-
-    public ICollection<Warehouse> WarehousesManaged { get; set; } = new List<Warehouse>();
-
     #endregion
 }
 
