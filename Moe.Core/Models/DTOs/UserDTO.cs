@@ -47,19 +47,24 @@ public class UserFormDTO : BaseFormDTO
     [Required]
     [StringLength(128, MinimumLength = 3)] 
     public string Name { get; set; }
-    
+
+
+    public Guid? WarehouseId { get; set; }
+
     //[MaxLength(64)] public string? ProfileImg { get; set; }
     //[MaxLength(64)] public string? CoverImg { get; set; }
 }
-
-
-
-
-
 public class UserFormValidator : AbstractValidator<UserFormDTO>
 {
     public UserFormValidator()
     {
+
+        RuleFor(x => x.WarehouseId)
+    .NotNull()
+    .WithMessage("Warehouse is required for WAREHOUSE_ADMIN")
+    .When(x => x.StaticRole == StaticRole.WAREHOUSE_ADMIN);
+
+
     }
 }
 

@@ -14,6 +14,8 @@ public static class RoleTypeExtensions
                 return "admin";
             case StaticRole.NORMAL:
                 return "NORMAL";
+            case StaticRole.WAREHOUSE_ADMIN:
+                return "warehouse-admin";
             default:
                 return "UNDEFINED";
         }

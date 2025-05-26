@@ -27,6 +27,7 @@ public class MasterDbContext : DbContext
     public DbSet<Notification> Notifications { get; set; }
     
     //{{INSERTION_POINT}}  
+    public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<SystemSettings> SystemSettings { get; set; }
 
     public DbSet<ChangePasswordRequest> ChangePasswordRequest { get; set; }

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Moe.Core.Null;
 using Microsoft.AspNetCore.Http.HttpResults;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.Extensions.Hosting;
 
 namespace Moe.Core.Services;
 
@@ -58,12 +59,12 @@ public class UsersService : BaseService, IUsersService
 
         var existingUser = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == form.Email || u.Phone == form.Phone);
-
         if (existingUser != null)
         {
             return new Response<UserDTO>(null, "Email or Phone already exists.", 400);
         }
 
+        await _context.EnsureEntityExists<Warehouse>(form.WarehouseId);
 
         var user = _mapper.Map<User>(form);
 
@@ -78,11 +79,7 @@ public class UsersService : BaseService, IUsersService
        
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
-
-      
         var userDTO = _mapper.Map<UserDTO>(user);
-
-      
         return new Response<UserDTO>(userDTO, null, 201);  
     }
 
@@ -159,6 +156,5 @@ public class UsersService : BaseService, IUsersService
         var message = user.IsBanned == UserState.Band ? "User state set to banned." : "User state set to active.";
         return new Response<string>(message, null, 200);
     }
-
 
 }

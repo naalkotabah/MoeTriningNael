@@ -33,19 +33,29 @@ public class User : BaseEntity
     
     [MaxLength(64)] public string? ProfileImg { get; set; }
     [MaxLength(64)] public string? CoverImg { get; set; }
+
+    #endregion
+
+    #region One-To-N
+    public Guid? WarehouseId { get; set; }
+    public Warehouse Warehouse { get; set; }
     #endregion
 
     #region Many-To-N
     public ICollection<Notification> NotificationsSent { get; set; } = new List<Notification>();
     public ICollection<Notification> NotificationsReceived { get; set; } = new List<Notification>();
     #endregion
+
+
+
 }
 
 public enum StaticRole
 {
     SUPER_ADMIN = 0,
     ADMIN = 10,
-    NORMAL = 20
+    NORMAL = 20,
+    WAREHOUSE_ADMIN = 30
 }
 
 public enum UserState

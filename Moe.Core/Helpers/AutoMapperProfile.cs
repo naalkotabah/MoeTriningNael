@@ -47,6 +47,11 @@ public class AutoMapperProfile : Profile
         
         //{{INSERTION_POINT}}
         
+        CreateMap<Warehouse,WarehouseDTO>();
+        CreateMap<WarehouseFormDTO,Warehouse>();
+        CreateMap<WarehouseUpdateDTO,Warehouse>()
+            .IgnoreNullAndEmptyGuids();
+        
         CreateMap<SystemSettings,SystemSettingsDTO>();
         CreateMap<SystemSettingsFormDTO,SystemSettings>();
         CreateMap<SystemSettingsUpdateDTO,SystemSettings>()

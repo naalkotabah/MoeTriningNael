@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Moe.Core.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Moe.Core.Migrations
 {
     [DbContext(typeof(MasterDbContext))]
-    partial class MasterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250524165811_addWhaerhose")]
+    partial class addWhaerhose
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -502,16 +505,11 @@ namespace Moe.Core.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<Guid?>("WarehouseId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("\"Email\" IS NOT NULL");
-
-                    b.HasIndex("WarehouseId");
 
                     b.HasIndex("Phone", "PhoneCountryCode")
                         .IsUnique()
@@ -609,15 +607,6 @@ namespace Moe.Core.Migrations
                         .HasForeignKey("RoleId");
                 });
 
-            modelBuilder.Entity("Moe.Core.Models.Entities.User", b =>
-                {
-                    b.HasOne("Moe.Core.Models.Entities.Warehouse", "Warehouse")
-                        .WithMany("Admins")
-                        .HasForeignKey("WarehouseId");
-
-                    b.Navigation("Warehouse");
-                });
-
             modelBuilder.Entity("Moe.Core.Models.Entities.Country", b =>
                 {
                     b.Navigation("Cities");
@@ -633,11 +622,6 @@ namespace Moe.Core.Migrations
                     b.Navigation("NotificationsReceived");
 
                     b.Navigation("NotificationsSent");
-                });
-
-            modelBuilder.Entity("Moe.Core.Models.Entities.Warehouse", b =>
-                {
-                    b.Navigation("Admins");
                 });
 #pragma warning restore 612, 618
         }
