@@ -84,6 +84,8 @@ public static class AppServicesExtensions
         services.AddScoped<IRolesService, RolesService>();
         
         //{{INSERTION_POINT}}
+        services.AddScoped<IWarehouseItemTransactionsService, WarehouseItemTransactionsService>();
+        services.AddScoped<IItemsService, ItemsService>();
         services.AddScoped<IWarehousesService, WarehousesService>();
         
         return services;

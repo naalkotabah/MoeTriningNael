@@ -8,7 +8,7 @@ using Moe.Core.Models.Entities.Moe.Core.Models.Entities;
 
 namespace Moe.Core.Data;
 
-public class MasterDbContext : DbContext
+public class MasterDbContext : DbContext    
 {
     public readonly IMapper _mapper;
     public MasterDbContext(DbContextOptions<MasterDbContext> options, IMapper mapper) : base(options)
@@ -27,6 +27,8 @@ public class MasterDbContext : DbContext
     public DbSet<Notification> Notifications { get; set; }
     
     //{{INSERTION_POINT}}  
+    public DbSet<WarehouseItemTransaction> WarehouseItemTransactions { get; set; }
+    public DbSet<Item> Items { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<SystemSettings> SystemSettings { get; set; }
 
@@ -37,9 +39,13 @@ public class MasterDbContext : DbContext
 
     public DbSet<ChangePhoneRequest> ChangePhoneRequest { get; set; }
 
+    public DbSet<WarehouseItem> WarehouseItems { get; set; }    
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Notification>(entity =>
         {
             entity.HasOne(e => e.Actor)
@@ -47,11 +53,42 @@ public class MasterDbContext : DbContext
                 .HasForeignKey(e => e.ActorId)
                 .OnDelete(DeleteBehavior.SetNull);
         });
-        
-        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<WarehouseItem>(entity =>
+        {
+
+            entity.HasOne(e => e.Warehouse)
+                  .WithMany(w => w.WarehouseItems)
+                  .HasForeignKey(e => e.WarehouseId);
+
+            entity.HasOne(e => e.Item)
+                  .WithMany(i => i.WarehouseItems)
+                  .HasForeignKey(e => e.ItemId);
+        });
+
+        modelBuilder.Entity<WarehouseItemTransaction>(entity =>
+        {
+       
+            entity.HasOne(e => e.FromWarehouse)
+                  .WithMany()
+                  .HasForeignKey(e => e.FromWarehouseId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.ToWarehouse)
+                  .WithMany()
+                  .HasForeignKey(e => e.ToWarehouseId)
+                  .OnDelete(DeleteBehavior.Restrict);
+          
+            entity.HasOne(e => e.Item)
+                  .WithMany()
+                  .HasForeignKey(e => e.ItemId)
+                  .OnDelete(DeleteBehavior.Restrict);
+        });
+
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
+
 }
 
 //Restrictions:

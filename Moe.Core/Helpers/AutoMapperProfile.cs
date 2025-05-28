@@ -43,9 +43,22 @@ public class AutoMapperProfile : Profile
         CreateMap<Notification, NotificationDTO>();
         CreateMap<Notification, NotificationDTOSimplified>();
         CreateMap<NotificationForm, Notification>();
-        
-        
+
+
         //{{INSERTION_POINT}}
+
+        CreateMap<WarehouseItemTransaction, WarehouseItemTransactionDTO>();
+        CreateMap<WarehouseItemTransactionFormDTO, WarehouseItemTransaction>();
+        CreateMap<WarehouseItemTransactionUpdateDTO, WarehouseItemTransaction>()
+            .IgnoreNullAndEmptyGuids();
+
+
+
+
+        CreateMap<Item,ItemDTO>();
+        CreateMap<ItemFormDTO,Item>();
+        CreateMap<ItemUpdateDTO,Item>()
+            .IgnoreNullAndEmptyGuids();
         
         CreateMap<Warehouse,WarehouseDTO>();
         CreateMap<WarehouseFormDTO,Warehouse>();

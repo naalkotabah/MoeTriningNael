@@ -26,6 +26,7 @@ public class Warehouse : BaseEntity
     #endregion
 
     #region Many-To-N
+    public ICollection<WarehouseItem> WarehouseItems { get; set; } = new List<WarehouseItem>();
     public ICollection<User> Admins { get; set; } = new List<User>();
     #endregion
 }
