@@ -5,10 +5,10 @@ namespace Moe.Core.Models.Entities;
 public class Warehouse : BaseEntity
 {
     #region One-To-N
-    [MaxLength(100)]
+    [MaxLength(128)]
     public string Name { get; set; }
 
-    [MaxLength(200)]
+    [MaxLength(128)]
     public string? Location { get; set; }
 
     [Range(-90, 90)]

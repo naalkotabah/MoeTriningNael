@@ -43,33 +43,30 @@ public class ItemsService : BaseService, IItemsService
     }
     public async Task<Response<ItemDTO>> Create(ItemFormDTO form)
     {
+      
+        var dto = await _context.CreateWithMapper<Item, ItemDTO>(form, _mapper);
+
         if (form.WarehouseId.HasValue)
         {
             await _context.EnsureEntityExists<Warehouse>(form.WarehouseId);
-        }
-        var dto = await _context.CreateWithMapper<Item, ItemDTO>(form, _mapper);
-
-        if (form.WarehouseId.HasValue && dto?.Id != null)
-        {
             var warehouseItem = new WarehouseItem
             {
-                WarehouseId = form.WarehouseId.Value,
-                ItemId = dto.Id.Value,
-                Qty = form.Qty ?? 0
+                WarehouseId = form.WarehouseId.GetValueOrDefault(),
+                ItemId = dto.Id.GetValueOrDefault(),
+                Qty = form.Qty.GetValueOrDefault(0)
             };
 
             await _context.AddAsync(warehouseItem);
             await _context.SaveChangesAsync();
         }
+
         return new Response<ItemDTO>(dto, null, 200);
     }
+
     public async Task Update(ItemUpdateDTO update)
     {
-        var item = await _context.Items
-            .FirstOrDefaultAsync(i => i.Id == update.Id);
-
-        if (item == null)
-            ErrResponseThrower.NotFound("item not found.");
+        
+        await _context.UpdateWithMapperOrException<Item, ItemUpdateDTO>(update, _mapper);
 
         if (update.WarehouseId.HasValue)
         {
@@ -78,44 +75,29 @@ public class ItemsService : BaseService, IItemsService
 
             if (warehouseItem != null)
             {
-
-                warehouseItem.WarehouseId = update.WarehouseId.Value;
-                warehouseItem.Qty = update.Qty ?? 0;
+                warehouseItem.WarehouseId = update.WarehouseId.GetValueOrDefault();
+                warehouseItem.Qty = update.Qty.GetValueOrDefault();
             }
             else
             {
                 var newWarehouseItem = new WarehouseItem
                 {
-                    WarehouseId = update.WarehouseId.Value,
+                    WarehouseId = update.WarehouseId.GetValueOrDefault(),
                     ItemId = update.Id,
-                    Qty = update.Qty ?? item.Qty ?? 0
+                    Qty = update.Qty.GetValueOrDefault()
                 };
                 await _context.AddAsync(newWarehouseItem);
             }
-
-            await _context.SaveChangesAsync();
-        }
-
-        await _context.UpdateWithMapperOrException<Item, ItemUpdateDTO>(update, _mapper);
-    }
-
-
-    public async Task Delete(Guid id)
-    {
-        await _context.SoftDeleteOrException<Item>(id);
-
-        var relatedWarehouseItems = await _context.WarehouseItems
-            .Where(w => w.ItemId == id && !w.IsDeleted)
-            .ToListAsync();
-
-        foreach (var item in relatedWarehouseItems)
-        {
-            item.IsDeleted = true;
-            item.DeletedAt = DateTime.UtcNow;
         }
 
         await _context.SaveChangesAsync();
     }
+
+
+
+    public async Task Delete(Guid id)=>
+      await _context.SoftDeleteOrException<Item>(id);
+    
 
 
 

@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -12,7 +13,6 @@ public class ItemDTO : BaseDTO
     public string Details { get; set; }
     public string? ImageUrl { get; set; }
     public decimal Price { get; set; }
-    public ItemSmpleDto? Warehouse { get; set; }
     public Guid CreatedByUserId { get; set; }
     #endregion
 
@@ -20,21 +20,15 @@ public class ItemDTO : BaseDTO
     #endregion
 }
 
-public class ItemSmpleDto
-{
-    public Guid? WarehouseId { get; set; }
-    public string? Name { get; set; }
-    public string? Location { get; set; }
 
-}
 public class ItemFormDTO : BaseFormDTO
 {
     [Required]
-    [MaxLength(100)]
+    [MaxLength(128)]
     public string Name { get; set; }
 
     [Required]
-    [MaxLength(500)]
+    [MaxLength(1024)]
     public string Details { get; set; }
 
     public Guid? WarehouseId { get; set; }
@@ -48,6 +42,7 @@ public class ItemFormDTO : BaseFormDTO
     [Range(0, double.MaxValue)]
     public decimal Price { get; set; }
 
+    [BindNever]
     [JsonIgnore] 
     public Guid CreatedByUserId { get; set; }
 }
@@ -77,7 +72,8 @@ public class ItemUpdateDTO : BaseUpdateDTO
     public string? ImageUrl { get; set; }
 
     public decimal? Price { get; set; }
- 
+
+    [BindNever]
     [JsonIgnore] 
     public Guid CreatedByUserId { get; set; }
 }
@@ -93,11 +89,4 @@ public class ItemFilter : BaseFilter
     public decimal? Price { get; set; }
     public Guid? CreatedByUserId { get; set; }
 
-    public Guid? WarehouseId { get; set; }
-
-    [Range(0, int.MaxValue)]
-    public int? MinQty { get; set; }
-
-    [Range(0, int.MaxValue)]
-    public int? MaxQty { get; set; }
 }

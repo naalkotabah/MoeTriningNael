@@ -7,16 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Item : BaseEntity
 {
     #region One-To-N
-    [MaxLength(100)]
-    public string Name { get; set; } 
 
-    [MaxLength(500)]
-    public string Details { get; set; }
-
-    public Guid? WarehouseId { get; set; }  
-    public int? Qty { get; set; }
-
-    public string? ImageUrl { get; set; } 
 
     [DeleteBehavior(DeleteBehavior.SetNull)]
     public User CreatedByUser { get; set; }
@@ -27,7 +18,16 @@ public class Item : BaseEntity
     [Range(0, int.MaxValue)]
     public decimal Price { get; set; }
     #endregion
+
     #region Non-Functional
+
+    [MaxLength(100)]
+    public string Name { get; set; }
+
+    [MaxLength(500)]
+    public string Details { get; set; }
+
+    public string? ImageUrl { get; set; }
     #endregion
 
     #region Many-To-N
