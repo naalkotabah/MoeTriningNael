@@ -69,14 +69,14 @@ public class MasterDbContext : DbContext
         modelBuilder.Entity<WarehouseItemTransaction>(entity =>
         {
        
-            entity.HasOne(e => e.FromWarehouse)
+            entity.HasOne(e => e.From)
                   .WithMany()
-                  .HasForeignKey(e => e.FromWarehouseId)
+                  .HasForeignKey(e => e.FromId)
                   .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(e => e.ToWarehouse)
+            entity.HasOne(e => e.To)
                   .WithMany()
-                  .HasForeignKey(e => e.ToWarehouseId)
+                  .HasForeignKey(e => e.ToId)
                   .OnDelete(DeleteBehavior.Restrict);
           
             entity.HasOne(e => e.Item)

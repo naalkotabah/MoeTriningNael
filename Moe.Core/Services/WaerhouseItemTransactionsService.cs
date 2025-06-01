@@ -15,7 +15,7 @@ public interface IWarehouseItemTransactionsService
     Task<Response<PagedList<WarehouseItemTransactionDTO>>> GetAll(WarehouseItemTransactionFilter filter);
     Task<Response<WarehouseItemTransactionDTO>> GetById(Guid id);
     Task<Response<WarehouseItemTransactionDTO>> Create(WarehouseItemTransactionFormDTO form);
-    Task Update(WarehouseItemTransactionUpdateDTO update);
+ 
     Task Delete(Guid id);
 }
 
@@ -47,10 +47,10 @@ public class WarehouseItemTransactionsService : BaseService, IWarehouseItemTrans
         await _context.EnsureEntityExists<Item>(form.ItemId, "Item is not Found");
         var transaction = new WarehouseItemTransaction
         {
-            FromWarehouseId = form.FromWarehouseId,
-            ToWarehouseId = form.ToWarehouseId,
+            FromId = form.FromWarehouseId,
+            ToId = form.ToWarehouseId,
             ItemId = form.ItemId,
-            Qtu = form.Qtu,
+            Qty = form.Qtu,
           
         };
        
@@ -64,10 +64,10 @@ public class WarehouseItemTransactionsService : BaseService, IWarehouseItemTrans
                 .Where(e => e.WarehouseId == form.FromWarehouseId && e.ItemId == form.ItemId)
                 .FirstOrDefaultAsync();
 
-            if (fromWarehouseItem == null || fromWarehouseItem.Qtu < form.Qtu)
+            if (fromWarehouseItem == null || fromWarehouseItem.Qty < form.Qtu)
                 return new Response<WarehouseItemTransactionDTO>(null, "Insufficient quantity in source warehouse", 400);
 
-            fromWarehouseItem.Qtu -= form.Qtu;
+            fromWarehouseItem.Qty -= form.Qtu;
             _context.WarehouseItems.Update(fromWarehouseItem);
         }
         var toWarehouseItem = await _context.WarehouseItems
@@ -80,13 +80,13 @@ public class WarehouseItemTransactionsService : BaseService, IWarehouseItemTrans
             {
                 WarehouseId = form.ToWarehouseId,
                 ItemId = form.ItemId,
-                Qtu = form.Qtu,
+                Qty = form.Qtu,
             };
             await _context.WarehouseItems.AddAsync(toWarehouseItem);
         }
         else
         {
-            toWarehouseItem.Qtu += form.Qtu;
+            toWarehouseItem.Qty += form.Qtu;
             _context.WarehouseItems.Update(toWarehouseItem);
         }
   
@@ -96,10 +96,7 @@ public class WarehouseItemTransactionsService : BaseService, IWarehouseItemTrans
         return new Response<WarehouseItemTransactionDTO>(dto, null, 200);
     }
 
-    public async Task Update(WarehouseItemTransactionUpdateDTO update)
-    {
-        await _context.UpdateWithMapperOrException<WarehouseItemTransaction, WarehouseItemTransactionUpdateDTO>(update, _mapper);
-    }
+
 
     public async Task Delete(Guid id) =>
         await _context.SoftDeleteOrException<WarehouseItemTransaction>(id);

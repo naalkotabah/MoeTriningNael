@@ -53,21 +53,6 @@ public class WarehouseItemTransactionsController : BaseController
         => Ok(await _warehouseItemTransactionsService.Create(form));
 
     /// <summary>
-    /// Updates an existing warehouse item transaction by its ID.
-    /// </summary>
-    /// <remarks>Required Roles: Any</remarks>
-    [Authorize]
-    [HttpPut("{id}")]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> Update(Guid id, [Required][FromBody] WarehouseItemTransactionUpdateDTO update)
-    {
-        update.Id = id;
-        await _warehouseItemTransactionsService.Update(update);
-        return NoContent(); // 204 No Content is more appropriate for updates
-    }
-
-    /// <summary>
     /// Deletes a warehouse item transaction by its ID.
     /// </summary>
     /// <remarks>Required Roles: Any</remarks>
@@ -75,11 +60,9 @@ public class WarehouseItemTransactionsController : BaseController
     [HttpDelete("{id}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        await _warehouseItemTransactionsService.Delete(id);
-        return NoContent(); // 204 No Content is more appropriate for deletes
-    }
+    public async Task<IActionResult> Delete(Guid id)=>  
+      Ok(_warehouseItemTransactionsService.Delete(id)); 
+    
 
     #endregion
 }

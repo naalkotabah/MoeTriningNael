@@ -40,35 +40,7 @@ public class WarehouseItemTransactionFormDTO : BaseFormDTO
     public int Qtu { get; set; }
     #endregion
 }
-public class WarehouseItemTransactionValidator : AbstractValidator<WarehouseItemTransactionFormDTO>
-{
-  public WarehouseItemTransactionValidator()
-    {
-        RuleFor(x => x.ToWarehouseId)
-            .NotEmpty().WithMessage("ToWarehouseId is required.");
-        RuleFor(x => x.ItemId)
-            .NotEmpty().WithMessage("ItemId is required.");
-        RuleFor(x => x.Qtu)
-            .GreaterThan(0).WithMessage("Quantity must be greater than zero.");
-    }
-}
-public class WarehouseItemTransactionUpdateDTO : BaseUpdateDTO
-{
-    #region One-To-N
-    public Guid? FromWarehouseId { get; set; }
 
-    [Required]
-    public Guid ToWarehouseId { get; set; }
-
-    [Required]
-    public Guid ItemId { get; set; }
-    #endregion
-
-    #region Functional
-    [Range(1, int.MaxValue)]
-    public int Qtu { get; set; }
-    #endregion
-}
 
 public class WarehouseItemTransactionFilter : BaseFilter
 {
@@ -80,6 +52,9 @@ public class WarehouseItemTransactionFilter : BaseFilter
 
     #region Functional
     [Range(0, int.MaxValue)]
-    public int? Qtu { get; set; }
+    public int? MinQty { get; set; } 
+
+    [Range(0, int.MaxValue)]
+    public int? MaxQty{ get; set; }
     #endregion
 }

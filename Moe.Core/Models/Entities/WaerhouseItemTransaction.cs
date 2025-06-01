@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Moe.Core.Models.Entities;
@@ -5,16 +6,24 @@ namespace Moe.Core.Models.Entities;
 public class WarehouseItemTransaction : BaseEntity
 {
     #region One-To-N
-    public Guid? FromWarehouseId { get; set; }
-    public Warehouse FromWarehouse { get; set; }
-    public Guid ToWarehouseId { get; set; }
-    public Warehouse ToWarehouse { get; set; }
-    public Guid ItemId { get; set; }
+    [DeleteBehavior(DeleteBehavior.SetNull)]
+    public Warehouse From { get; set; }
+    public Guid? FromId { get; set; }
+
+
+    [DeleteBehavior(DeleteBehavior.SetNull)]
+    public Warehouse To { get; set; }
+    public Guid ToId { get; set; }
+    
+
+    [DeleteBehavior(DeleteBehavior.SetNull)]
     public Item Item { get; set; }
+    public Guid ItemId { get; set; }
+ 
     #endregion
     #region Functional
     [Range(0, int.MaxValue)]
-    public int Qtu { get; set; }
+    public int Qty { get; set; }
     #endregion
 }
 

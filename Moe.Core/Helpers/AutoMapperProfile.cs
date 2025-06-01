@@ -48,8 +48,7 @@ public class AutoMapperProfile : Profile
         //{{INSERTION_POINT}}
 
         CreateMap<WarehouseItemTransaction, WarehouseItemTransactionDTO>();
-        CreateMap<WarehouseItemTransactionFormDTO, WarehouseItemTransaction>();
-        CreateMap<WarehouseItemTransactionUpdateDTO, WarehouseItemTransaction>()
+        CreateMap<WarehouseItemTransactionFormDTO, WarehouseItemTransaction>()
             .IgnoreNullAndEmptyGuids();
 
 

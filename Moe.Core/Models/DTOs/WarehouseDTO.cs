@@ -32,7 +32,7 @@ public class WarehouseFormDTO : BaseFormDTO
 
 public class WarehouseUpdateDTO : BaseUpdateDTO
 {
-    [Required]
+
     [MaxLength(100)]
     public string Name { get; set; }
 
